@@ -83,3 +83,10 @@ local.properties
 run/
 
 logs/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Local documentation / notes
+docs/

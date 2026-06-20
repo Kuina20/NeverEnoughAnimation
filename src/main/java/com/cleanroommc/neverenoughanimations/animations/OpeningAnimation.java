@@ -21,8 +21,17 @@ public class OpeningAnimation {
 
     public static boolean onGuiOpen(GuiScreen screen) {
         if (screen instanceof IAnimatedScreen animatedScreen) {
-            if (Minecraft.getMinecraft().currentScreen == null) {
+            GuiScreen current = Minecraft.getMinecraft().currentScreen;
+            if (current == null) {
                 animate(animatedScreen, true);
+            } else if (current == animatedGui && startTime > 0) {
+                // The currently displayed animated screen is being instantly replaced by another
+                // animated screen while its opening animation is still running. This happens e.g. in
+                // creative mode where vanilla first opens GuiInventory and its initGui immediately
+                // swaps to GuiContainerCreative. Transfer the running opening animation to the new
+                // screen so neither the opening nor the later closing animation gets lost.
+                animatedGui = animatedScreen;
+                lastGui = animatedScreen;
             }
         } else if (Minecraft.getMinecraft().currentScreen == lastGui && screen == null && !shouldCloseLast) {
             if (animatedGui == null || getValue(animatedGui) >= 1f || startTime > 0) {
