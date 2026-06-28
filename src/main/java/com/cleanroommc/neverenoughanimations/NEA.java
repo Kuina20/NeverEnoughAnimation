@@ -74,6 +74,7 @@ public class NEA {
     public void onGuiTick(TickEvent.ClientTickEvent event) {
         //OpeningAnimation.checkGuiToClose();
         if (event.phase == TickEvent.Phase.END) return;
+        OpeningAnimation.syncKeyBindsWhileClosing();
         ItemHoverAnimation.onGuiTick();
     }
 

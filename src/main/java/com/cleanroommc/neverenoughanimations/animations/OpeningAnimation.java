@@ -7,6 +7,7 @@ import com.cleanroommc.neverenoughanimations.util.Interpolations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiOpenEvent;
 
 public class OpeningAnimation {
@@ -127,10 +128,17 @@ public class OpeningAnimation {
         return isAnimating(screen) && startTime < 0;
     }
 
+    public static void syncKeyBindsWhileClosing() {
+        if ((lastGui != null && animatedGui == lastGui && startTime < 0) || shouldCloseLast) {
+            KeyBinding.updateKeyBindState();
+        }
+    }
+
     public static void checkGuiToClose() {
         if (shouldCloseLast && lastGui != null) {
             //((GuiScreen) lastGui).allowUserInput = oldAllowAllInteractions;
             //oldAllowAllInteractions = false;
+            KeyBinding.updateKeyBindState();
             Minecraft.getMinecraft().displayGuiScreen(null);
             shouldCloseLast = false;
             lastGui = null;
